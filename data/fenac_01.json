@@ -1,7 +1,7 @@
 [
   {
-    "pergunta": "O que é CPU?",
-    "opcoes": ["Memória", "Processador", "HD", "Fonte"],
-    "resposta": 1
+    "pergunta": "Teste funcionando?",
+    "opcoes": ["Sim", "Não", "Talvez", "Erro"],
+    "resposta": 0
   }
 ]
