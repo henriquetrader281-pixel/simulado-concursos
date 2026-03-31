@@ -23,7 +23,6 @@ function finalizar() {
 
   document.getElementById("quiz").innerHTML = "";
 
-  // 🔥 AQUI É O IMPORTANTE (CRASE CERTA)
   document.getElementById("resultado").innerHTML = `
     <h2>Resultado Final</h2>
     <p>Acertos: ${acertos}</p>
