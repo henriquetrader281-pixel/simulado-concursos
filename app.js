@@ -1,3 +1,4 @@
+// 🔥 VARIÁVEIS GLOBAIS
 let questoes = [];
 let respostas = [];
 let indice = 0;
@@ -5,6 +6,7 @@ let tempo = 60 * 60;
 let intervalo;
 let usuarioAtual = "";
 
+// 🔐 CHAVES DE ACESSO (ERRO ESTAVA AQUI ANTES)
 const ADMIN = "admin123";
 const USER = "aluno123";
 
@@ -188,7 +190,7 @@ function embaralhar(a) {
 }
 
 
-// ⌨️ ENTER PRA LOGAR
+// ⌨️ ENTER PARA LOGAR
 document.addEventListener("DOMContentLoaded", () => {
   document.getElementById("senha").addEventListener("keypress", function(e) {
     if (e.key === "Enter") validar();
