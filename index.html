@@ -1,37 +1,45 @@
-function finalizar() {
-  clearInterval(intervalo);
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <title>Simulado Concursos</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
 
-  let acertos = 0;
+<h1>Simulado de Concursos</h1>
 
-  questoes.forEach((q, i) => {
-    if (respostas[i] === q.resposta) acertos++;
-  });
+<input type="password" id="senha" placeholder="Digite a chave">
+<button onclick="validar()">Entrar</button>
 
-  let total = questoes.length;
-  let erros = total - acertos;
-  let percentual = (acertos / total) * 100;
+<div id="sistema" style="display:none;">
 
-  // 🔥 SALVAMENTO AQUI
-  const banco = document.getElementById("banco").value;
-  const disciplina = document.getElementById("disciplina").value;
+  <select id="banco">
+    <option value="fenac">FENAC</option>
+    <option value="bb">Banco do Brasil</option>
+    <option value="nh">Prefeitura NH</option>
+  </select>
 
-  localStorage.setItem(
-    usuarioAtual + "_" + banco + "_" + disciplina,
-    JSON.stringify({
-      acertos,
-      erros,
-      percentual
-    })
-  );
+  <select id="disciplina">
+    <option value="todas">Todas</option>
+    <option value="portugues">Português</option>
+    <option value="matematica">Matemática</option>
+    <option value="informatica">Informática</option>
+    <option value="bancarios">Bancários</option>
+    <option value="logica">Lógica</option>
+  </select>
 
-  let aprovado = percentual >= 70 ? "APROVADO ✅" : "REPROVADO ❌";
+  <button onclick="carregar()">Iniciar Prova</button>
+  <button onclick="verHistorico()">Ver Histórico</button>
 
-  document.getElementById("quiz").innerHTML = "";
-  document.getElementById("resultado").innerHTML = `
-    <h2>Resultado Final</h2>
-    <p>Acertos: ${acertos}</p>
-    <p>Erros: ${erros}</p>
-    <p>Aproveitamento: ${percentual.toFixed(1)}%</p>
-    <h3>${aprovado}</h3>
-  `;
-}
+  <div id="timer"></div>
+  <div id="quiz"></div>
+  <div id="resultado"></div>
+
+</div>
+
+<!-- 🔥 IMPORTANTE: NÃO COLOQUE JS AQUI -->
+<script src="app.js"></script>
+
+</body>
+</html>
