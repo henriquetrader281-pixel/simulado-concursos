@@ -1,18 +1,22 @@
 let questoes = [];
 let respostas = [];
+let indice = 0;
 let tempo = 60 * 60;
 let intervalo;
 
 async function carregar() {
   try {
-    const res = await fetch('./data/fenac_01.json');
+    const banco = document.getElementById("banco").value;
+
+    const res = await fetch(`./data/${banco}_01.json`);
     const data = await res.json();
 
-    questoes = embaralhar(data).slice(0, 10);
+    questoes = embaralhar(data).slice(0, 20);
     respostas = [];
+    indice = 0;
 
-    mostrar();
     iniciarTimer();
+    mostrar();
 
   } catch (e) {
     alert("Erro ao carregar questões");
@@ -24,46 +28,65 @@ function mostrar() {
   const div = document.getElementById("quiz");
   div.innerHTML = "";
 
-  questoes.forEach((q, i) => {
-    div.innerHTML += `
-      <div class="card">
-        <p>${i+1}. ${q.pergunta}</p>
-        ${q.opcoes.map((o,j)=>
-          `<label><input type="radio" name="q${i}" onclick="responder(${i},${j})"> ${o}</label>`
-        ).join("")}
-      </div>
-    `;
-  });
+  if (indice >= questoes.length) {
+    finalizar();
+    return;
+  }
+
+  const q = questoes[indice];
+
+  div.innerHTML = `
+    <div class="card">
+      <p>${indice + 1}. ${q.pergunta}</p>
+      ${q.opcoes.map((o, j) =>
+        `<button onclick="responder(${j})">${o}</button>`
+      ).join("<br>")}
+    </div>
+  `;
 }
 
-function responder(i,j){
-  respostas[i] = j;
+function responder(respostaEscolhida) {
+  respostas[indice] = respostaEscolhida;
+  indice++;
+  mostrar();
 }
 
-function iniciarTimer(){
-  intervalo = setInterval(()=>{
+function iniciarTimer() {
+  clearInterval(intervalo);
+  intervalo = setInterval(() => {
     tempo--;
     document.getElementById("timer").innerText =
-      "Tempo: " + Math.floor(tempo/60) + ":" + (tempo%60);
+      "Tempo: " + Math.floor(tempo / 60) + ":" + String(tempo % 60).padStart(2, '0');
 
-    if(tempo <= 0) finalizar();
-  },1000);
+    if (tempo <= 0) finalizar();
+  }, 1000);
 }
 
-function finalizar(){
+function finalizar() {
   clearInterval(intervalo);
 
   let acertos = 0;
-  questoes.forEach((q,i)=>{
-    if(respostas[i] === q.resposta) acertos++;
+
+  questoes.forEach((q, i) => {
+    if (respostas[i] === q.resposta) acertos++;
   });
 
-  let pct = (acertos/questoes.length)*100;
+  let total = questoes.length;
+  let erros = total - acertos;
+  let percentual = (acertos / total) * 100;
 
-  document.getElementById("resultado").innerHTML =
-    `Acertos: ${acertos} / ${questoes.length} <br> ${pct.toFixed(1)}%`;
+  let aprovado = percentual >= 70 ? "APROVADO ✅" : "REPROVADO ❌";
+
+  document.getElementById("quiz").innerHTML = "";
+  document.getElementById("resultado").innerHTML = `
+    <h2>Resultado Final</h2>
+    <p>Acertos: ${acertos}</p>
+    <p>Erros: ${erros}</p>
+    <p>Aproveitamento: ${percentual.toFixed(1)}%</p>
+    <h3>${aprovado}</h3>
+  `;
 }
 
-function embaralhar(a){
-  return a.sort(()=>Math.random()-0.5);
+function embaralhar(a) {
+  return a.sort(() => Math.random() - 0.5);
 }
